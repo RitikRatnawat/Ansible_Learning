@@ -1,0 +1,71 @@
+- name: Ansible Python Task
+  hosts: localhost
+  gather_facts: false
+  vars:
+    region: ap-south-1
+    instance_type: t2.micro
+    security_group: ansiblehosts
+    key_pair: ansible-controller
+    subnet_id: subnet-0fe4bcfb504f4c30c
+    ami_id: ami-0f5ee92e2d63afc18
+    user_data_script: |
+      #!/bin/bash
+      echo "Hello World!"
+
+  tasks:
+    - name: Create a EC2 Instance
+      amazon.aws.ec2_instance:
+        name: Ansible Node
+        region: "{{ region }}"
+        image_id: "{{ ami_id }}"
+        instance_type: "{{ instance_type }}"
+        key_name: "{{ key_pair }}"
+        security_group: "{{ security_group }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        network:
+          assign_public_ip: true
+        user_data: "{{ user_data_script }}"
+        wait: true
+        state: running
+        tags:
+          Name: Ansible-Node
+      register: ec2
+
+    - name: Display Instance IP
+      debug:
+        msg: "{{ ec2.instances[0].public_ip_address }}"
+
+    - name: Wait for SSH Availability
+      wait_for:
+        host: "{{ ec2.instances[0].public_ip_address }}"
+        port: 22
+        state: started
+        delay: 10
+        timeout: 300
+   
+    - name: Add Instance to Inventory
+      ansible.builtin.add_host:
+        hostname: "{{ ec2.instances[0].public_ip_address }}"
+        groupname: webservers
+        ansible_connection: ssh
+        
+
+- name: Configure Network Settings
+  hosts: webservers
+  become: "{{ become | default(True) }}"
+  gather_facts: true
+  tasks:
+    - name: Update System Packages
+      apt:
+        update_cache: yes
+        upgrade: safe
+      
+- name: Install and Configure Software Packages
+  hosts: webservers
+  become: "{{ become | default(True) }}"
+  gather_facts: true
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
