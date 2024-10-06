@@ -1,0 +1,21 @@
+devices ['device1', 'device2']
+
+precheck bgp-router_id
+precheck interface-status_down
+
+echo 'Hello World'
+
+postcheck bgp-router_id
+
+---------------------------
+
+devices ['device3', 'device4']
+
+precheck bgp-router_id
+
+echo 'Hello World'
+
+postcheck interface-status_down
+
+---------------------------
+

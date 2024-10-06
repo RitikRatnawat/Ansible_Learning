@@ -1,0 +1,31 @@
+{
+    "executions": [
+        {
+            "devices": [
+                "device1",
+                "device2"
+            ],
+            "prechecks": [
+                "bgp-router_id",
+                "interface-status_down"
+            ],
+            "postchecks": [
+                "bgp-router_id"
+            ],
+            "script": "echo 'Hello World'"
+        },
+        {
+            "devices": [
+                "device3",
+                "device4"
+            ],
+            "prechecks": [
+                "bgp-router_id"
+            ],
+            "postchecks": [
+                "interface-status_down"
+            ],
+            "script": "echo 'Hello World'"
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+hostname {{ HostName }}
+!
+!
+{% for Vlan in Vlans -%}
+vlan {{ Vlan['VlanId'] }}
+  name {{ Vlan['VlanName'] }}
+!
+{% endfor -%}
+!
+{% for Interface in SwInterfaces -%}
+interface {{ Interface['IntName'] }}
+  description {{ Interface['IntDescription'] }}
+  no shutdown
+  {% if Interface['IntTrunk'] -%}
+  switchport mode trunk
+  {% else -%}
+  switchport mode access
+  switchport access vlan {{ Vlans[1]['VlanId'] }}
+  {% endif -%}
+!
+{% endfor -%}
+!
+interface vlan {{MgmtVlan}}
+   ip address {{ MgmtVlanIp}} 255.255.255.0
+   no shutdown
+!
+ip default-gateway {{DefaultGw}}
+!

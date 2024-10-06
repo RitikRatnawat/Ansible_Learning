@@ -1,0 +1,25 @@
+- name: Network Config Playbook
+  hosts: localhost
+  vars_files:
+    - execution.json
+  tasks:
+    - name: Creating a Configuration File
+      ansible.builtin.template:
+        src: iplan.j2
+        dest: config.csv
+        mode: "0600"
+
+    # - name: Building a Docker Image
+    #   community.docker.docker_image:
+    #     name: config-image
+    #     build:
+    #       path: .
+    #     tag: v1
+    #     source: build
+    #     state: present
+
+    # - name: Running a Docker Image
+    #   community.docker.docker_container:
+    #     name: Ubuntu-Container
+    #     image: config-image:v1
+    #     state: present

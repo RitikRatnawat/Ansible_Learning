@@ -1,0 +1,16 @@
+{% for execution in executions %}
+devices {{ execution.devices }}
+
+{% for check in execution.prechecks %}
+precheck {{ check }}
+{% endfor %}
+
+{{ execution.script }}
+
+{% for check in execution.postchecks %}
+postcheck {{ check }}
+{% endfor %}
+
+---------------------------
+
+{% endfor %}

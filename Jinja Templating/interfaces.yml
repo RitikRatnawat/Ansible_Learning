@@ -1,0 +1,27 @@
+HostName: Test-Sw-01
+
+Vlans:
+  - VlanId: 10
+    VlanName: MGMT
+  - VlanId: 20
+    VlanName: ACCESS
+
+SwInterfaces:
+  - IntName: Gi0/1
+    IntDescription: "To-PC01"
+    IntTrunk: false
+  - IntName: Gi0/2
+    IntDescription: "To-PC02"
+    IntTrunk: false
+  - IntName: Gi0/3
+    IntDescription: "To-PC03"
+    IntTrunk: false
+  - IntName: Gi0/10
+    IntDescription: "Uplink-GW"
+    IntTrunk: true
+
+MgmtVlan: 10
+
+MgmtVlanIp: 192.168.10.5
+
+DefaultGw: 192.168.10.1
