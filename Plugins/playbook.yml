@@ -1,0 +1,13 @@
+---
+- name: Working with Plugins
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Print Message
+      ansible.builtin.debug:
+        msg: "{{ 'message' | print_message | upper }}"
+
+    - name: Reading a Json File
+      ansible.builtin.debug:
+        msg: "{{ lookup('file', 'data.json') | json_to_list }}"
